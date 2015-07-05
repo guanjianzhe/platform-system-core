@@ -25,9 +25,9 @@
 #include <sys/types.h>
 #include <time.h>
 #include <unistd.h>
-
+#ifdef __BIONIC__
 #include <android/set_abort_message.h>
-
+#endif
 #include <log/log.h>
 #include <log/logd.h>
 #include <log/logger.h>
@@ -166,11 +166,11 @@ int __android_log_buf_write(int bufID, int prio, const char *tag, const char *ms
             snprintf(tmp_tag, sizeof(tmp_tag), "use-Rlog/RLOG-%s", tag);
             tag = tmp_tag;
     }
-
+    #if __BIONIC__ 
     if (prio == ANDROID_LOG_FATAL) {
         android_set_abort_message(msg);
     }
-
+    #endif
     vec[0].iov_base   = (unsigned char *) &prio;
     vec[0].iov_len    = 1;
     vec[1].iov_base   = (void *) tag;
